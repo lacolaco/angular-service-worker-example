@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+// Import SwUpdate from NGSW
+import { SwUpdate } from '@angular/service-worker';
 
 @Component({
   selector: 'app-root',
@@ -27,5 +29,17 @@ import { Component } from '@angular/core';
   styles: []
 })
 export class AppComponent {
-  title = 'app';
+  title = 'new app';
+
+  // Inject SwUpdate
+  constructor(private swUpdate: SwUpdate) {
+    // Subscribe new worker is available
+    this.swUpdate.available.subscribe(() => {
+      if(window.confirm('新しいバージョンに更新しますか？')) {
+        window.location.reload(true);
+      }
+    });
+    // Check for new version
+    this.swUpdate.checkForUpdate();
+  }
 }
